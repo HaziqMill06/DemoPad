@@ -46,13 +46,14 @@
         }
     </script>
     <style>
+        /* Base Styles & Smooth Scroll hiding native scrollbar */
         body {
             margin: 0;
             padding: 0;
             overflow-x: hidden;
             background-color: #0a1f14;
             color: #f8f9fa;
-            cursor: none;
+            cursor: none; /* Custom cursor */
         }
         
         .light body {
@@ -65,12 +66,14 @@
             background: transparent;
         }
 
+        /* Lenis Recommended Styles */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
         .lenis.lenis-scrolling iframe { pointer-events: none; }
 
+        /* Glassmorphism */
         .glass {
             background: rgba(10, 31, 20, 0.4);
             backdrop-filter: blur(12px);
@@ -83,6 +86,7 @@
             border: 1px solid rgba(10, 31, 20, 0.1);
         }
 
+        /* Image Hover Zoom */
         .img-zoom-container { overflow: hidden; }
         .img-zoom-container img {
             transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -91,6 +95,7 @@
             transform: scale(1.08);
         }
 
+        /* Custom Cursor */
         #custom-cursor {
             position: fixed;
             top: 0;
@@ -112,6 +117,7 @@
             backdrop-filter: blur(2px);
         }
         
+        /* Masonry */
         .masonry {
             column-count: 1;
             column-gap: 1.5rem;
@@ -120,9 +126,11 @@
         @media (min-width: 1024px) { .masonry { column-count: 3; } }
         .masonry-item { break-inside: avoid; margin-bottom: 1.5rem; }
 
+        /* Split Text Hide */
         .split-line { overflow: hidden; }
         .split-word { display: inline-block; transform: translateY(100%); opacity: 0; }
 
+        /* Logo image styling */
         .logo-img {
             height: 40px;
             width: auto;
@@ -131,6 +139,7 @@
         .dark .logo-img {
             filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
         }
+        /* For light mode logo invert or adjust if needed */
         .light .logo-img {
             filter: brightness(0.9) drop-shadow(0 0 6px rgba(212, 175, 55, 0.2));
         }
@@ -144,6 +153,7 @@
         const { useState, useEffect, useRef, useLayoutEffect, createContext, useContext } = React;
         gsap.registerPlugin(ScrollTrigger);
 
+        // Icons (Inline SVGs for reliability & zero dependencies)
         const Icons = {
             Menu: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>,
             X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>,
@@ -161,6 +171,7 @@
 
         const ThemeContext = createContext();
 
+        // Split text utility for GSAP animation
         const AnimatedText = ({ text, className = "" }) => {
             const words = text.split(" ");
             return (
@@ -173,11 +184,6 @@
                 </div>
             );
         };
-
-        // LOGO URL - Tukar link ni dengan gambar logo anda
-        const LOGO_URL = "https://i.ibb.co/Zxt9krj/paddy-logo.png";
-        // FALLBACK jika gambar tak keluar
-        const FALLBACK_LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%230a1f14'/%3E%3Ctext x='100' y='110' font-family='serif' font-size='40' fill='%23d4af37' text-anchor='middle' font-weight='bold'%3EPADDY%3C/text%3E%3Ctext x='100' y='145' font-family='sans-serif' font-size='14' fill='%23d4af37' text-anchor='middle'%3ECAFE %26 RESTAURANT%3C/text%3E%3C/svg%3E";
 
         const Loader = ({ setLoading }) => {
             const loaderRef = useRef(null);
@@ -194,12 +200,16 @@
 
             return (
                 <div ref={loaderRef} className="fixed inset-0 z-[100] bg-forest flex items-center justify-center">
+                    {/* Loader with logo image */}
                     <img 
-                        src={images/Logo.jpg}
+                        src="images/logo.jpg" 
                         alt="Paddy Cafe Logo" 
                         className="loader-logo opacity-0 h-24 w-auto md:h-32 object-contain"
-                        onError={(e) => { e.target.src = FALLBACK_LOGO; }}
+                        onError={(e) => { e.target.style.display = 'none'; }} // fallback if image fails
                     />
+                    <h1 className="loader-logo opacity-0 text-gold font-serif text-4xl md:text-6xl tracking-widest absolute">
+                        
+                    </h1>
                 </div>
             );
         };
@@ -227,13 +237,14 @@
                 <>
                     <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'py-4 glass' : 'py-6 bg-transparent'}`}>
                         <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center">
+                            {/* Logo with image */}
                             <a href="#" className="flex items-center gap-2 z-50" 
                                onMouseEnter={handleInteractiveHover} onMouseLeave={handleInteractiveHover}>
                                 <img 
-                                    src={images/Logo.jpg}
+                                    src="images/logo.jpg" 
                                     alt="Paddy Cafe Logo" 
                                     className="logo-img h-10 w-auto"
-                                    onError={(e) => { e.target.src = FALLBACK_LOGO; }}
+                                    onError={(e) => { e.target.style.display = 'none'; }} // fallback if image fails
                                 />
                                 <span className="font-serif text-2xl tracking-widest text-gold font-bold hidden sm:inline">
                                     PADDY CAFE
@@ -264,6 +275,7 @@
                         </div>
                     </nav>
 
+                    {/* Mobile Menu */}
                     <div className={`fixed inset-0 bg-forest z-40 flex flex-col items-center justify-center transition-transform duration-700 ease-in-out ${menuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
                         <div className="flex flex-col space-y-8 text-center text-2xl font-serif text-light">
                             {['About', 'Menu', 'Gallery', 'Events', 'Book'].map((item) => (
@@ -297,6 +309,7 @@
                         }
                     });
 
+                    // Initial text animation
                     gsap.to(".split-word", {
                         y: 0,
                         opacity: 1,
@@ -316,6 +329,7 @@
 
             return (
                 <section ref={heroRef} className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+                    {/* Cinematic Video Background */}
                     <div className="absolute inset-0 w-full h-full">
                         <div className="absolute inset-0 bg-black/50 z-10"></div>
                         <video 
@@ -326,10 +340,11 @@
                             className="w-full h-full object-cover scale-105"
                             style={{ filter: 'contrast(1.1) saturate(1.2)' }}
                         >
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-pouring-coffee-into-a-white-cup-beside-coffee-beans-4977-large.mp4" type="video/mp4" />
+                            <source src="Videos/CinematikPaddy.mp4" type="video/mp4" />
                         </video>
                     </div>
 
+                    {/* Content */}
                     <div className="relative z-20 text-center flex flex-col items-center px-4 hero-content mt-20">
                         <div className="glass p-8 md:p-16 rounded-3xl max-w-4xl mx-auto shadow-2xl">
                             <h2 className="text-gold text-sm md:text-base tracking-[0.3em] uppercase mb-4 hero-fade font-semibold">
@@ -353,6 +368,7 @@
                         </div>
                     </div>
 
+                    {/* Scroll Indicator */}
                     <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center hero-fade">
                         <span className="text-white text-xs tracking-widest uppercase mb-2">Scroll</span>
                         <div className="w-[1px] h-12 bg-white/30 overflow-hidden">
@@ -370,7 +386,9 @@
             useEffect(() => {
                 if (!mountRef.current) return;
 
+                // Scene setup
                 const scene = new THREE.Scene();
+                // Add soft environment lighting
                 const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
                 scene.add(ambientLight);
                 const dirLight = new THREE.DirectionalLight(0xd4af37, 1);
@@ -390,8 +408,10 @@
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
                 mountRef.current.appendChild(renderer.domElement);
 
+                // Create Coffee Cup Group
                 const cupGroup = new THREE.Group();
 
+                // Cup Body (Dark Green Ceramic)
                 const cupGeo = new THREE.CylinderGeometry(1.2, 0.8, 1.8, 64);
                 const cupMat = new THREE.MeshPhysicalMaterial({ 
                     color: 0x0a1f14, 
@@ -403,17 +423,20 @@
                 const cup = new THREE.Mesh(cupGeo, cupMat);
                 cupGroup.add(cup);
 
+                // Cup Interior (White)
                 const insideGeo = new THREE.CylinderGeometry(1.15, 0.75, 1.81, 64);
                 const insideMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.5 });
                 const inside = new THREE.Mesh(insideGeo, insideMat);
                 cupGroup.add(inside);
 
+                // Coffee Liquid
                 const liquidGeo = new THREE.CylinderGeometry(1.1, 0.7, 1.6, 64);
                 const liquidMat = new THREE.MeshStandardMaterial({ color: 0x2b1408, roughness: 0.2 });
                 const liquid = new THREE.Mesh(liquidGeo, liquidMat);
                 liquid.position.y = 0.05;
                 cupGroup.add(liquid);
 
+                // Cup Handle (Gold)
                 const handleGeo = new THREE.TorusGeometry(0.6, 0.15, 16, 64);
                 const handleMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8, roughness: 0.2 });
                 const handle = new THREE.Mesh(handleGeo, handleMat);
@@ -421,6 +444,7 @@
                 handle.rotation.z = -Math.PI / 16;
                 cupGroup.add(handle);
 
+                // Saucer
                 const saucerGeo = new THREE.CylinderGeometry(1.8, 1.5, 0.1, 64);
                 const saucerMat = new THREE.MeshPhysicalMaterial({ color: 0x0a1f14, roughness: 0.1, clearcoat: 1.0 });
                 const saucer = new THREE.Mesh(saucerGeo, saucerMat);
@@ -430,11 +454,12 @@
                 scene.add(cupGroup);
                 cupGroup.position.y = -0.5;
 
+                // Steam Particles
                 const particleCount = 100;
                 const particles = new THREE.BufferGeometry();
                 const positions = new Float32Array(particleCount * 3);
                 for(let i=0; i<particleCount*3; i++) {
-                    positions[i] = (Math.random() - 0.5) * 1.5;
+                    positions[i] = (Math.random() - 0.5) * 1.5; // Spread
                 }
                 particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
                 const particleMat = new THREE.PointsMaterial({
@@ -448,20 +473,23 @@
                 particleSystem.position.y = 1;
                 scene.add(particleSystem);
 
+                // Animation Loop
                 let reqId;
                 const clock = new THREE.Clock();
                 
                 const animate = () => {
                     const elapsedTime = clock.getElapsedTime();
                     
+                    // Gentle floating animation
                     cupGroup.position.y = -0.5 + Math.sin(elapsedTime * 1.5) * 0.05;
                     
+                    // Animate steam
                     const positions = particleSystem.geometry.attributes.position.array;
                     for(let i=1; i<particleCount*3; i+=3) {
-                        positions[i] += 0.01;
-                        positions[i-1] += Math.sin(elapsedTime + i) * 0.005;
+                        positions[i] += 0.01; // move up
+                        positions[i-1] += Math.sin(elapsedTime + i) * 0.005; // sway x
                         if (positions[i] > 2) {
-                            positions[i] = 0;
+                            positions[i] = 0; // reset height
                         }
                     }
                     particleSystem.geometry.attributes.position.needsUpdate = true;
@@ -471,6 +499,7 @@
                 };
                 animate();
 
+                // GSAP ScrollTrigger for 3D rotation
                 const ctx = gsap.context(() => {
                     gsap.to(cupGroup.rotation, {
                         y: Math.PI * 2,
@@ -484,6 +513,7 @@
                     });
                 }, containerRef);
 
+                // Resize handler
                 const handleResize = () => {
                     if(!mountRef.current) return;
                     camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
@@ -523,6 +553,7 @@
                             </div>
                         </div>
                         <div className="w-full lg:w-1/2 h-[500px] cursor-move" ref={mountRef}>
+                            {/* ThreeJS Canvas injected here */}
                         </div>
                     </div>
                 </section>
@@ -567,7 +598,7 @@
                     <div className="container mx-auto px-6 lg:px-12">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                             <div className="relative img-zoom-container rounded-2xl h-[600px] shadow-2xl">
-                                <img src="https://images.unsplash.com/photo-1596422846543-74c6c2122b15?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                                <img src="images/BG.WEBP" 
                                      alt="Paddy Cafe View" 
                                      className="w-full h-full object-cover rounded-2xl" />
                                 <div className="absolute inset-0 border-2 border-gold rounded-2xl transform translate-x-4 translate-y-4 -z-10 pointer-events-none"></div>
@@ -678,12 +709,12 @@
 
         const GalleryAndEvents = () => {
             const galleryImages = [
-                "https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                "https://images.unsplash.com/photo-1582200293405-f93ea9372e35?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                "https://images.unsplash.com/photo-1544148103-0773bf10d330?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                "https://images.unsplash.com/photo-1560963683-11bb5beffb32?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                "https://images.unsplash.com/photo-1502301103665-0b95cc738daf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                "https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", // Cafe interior
+                "https://images.unsplash.com/photo-1582200293405-f93ea9372e35?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", // Coffee close up
+                "https://images.unsplash.com/photo-1544148103-0773bf10d330?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", // Food dish
+                "https://images.unsplash.com/photo-1560963683-11bb5beffb32?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", // Nature view
+                "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", // Coffee beans
+                "https://images.unsplash.com/photo-1502301103665-0b95cc738daf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"  // Dining setup
             ];
 
             return (
@@ -695,6 +726,7 @@
                                 <p className="text-gray-300 font-light max-w-md">Experience the ambiance, the food, and the breathtaking views that await you at Paddy Cafe.</p>
                             </div>
                             <div className="flex gap-2">
+                                {/* Decorative elements */}
                                 <div className="w-2 h-2 rounded-full bg-gold"></div>
                                 <div className="w-8 h-2 rounded-full bg-gold"></div>
                             </div>
@@ -713,6 +745,7 @@
                             ))}
                         </div>
 
+                        {/* Events Banner */}
                         <div id="events" className="mt-32 relative rounded-3xl overflow-hidden glass p-10 md:p-16 text-center shadow-2xl border border-gold/30">
                             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1530103862676-de8892b07439?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
                             <div className="relative z-10 max-w-2xl mx-auto">
@@ -738,6 +771,7 @@
                 const name = formData.get('name');
                 const text = `Hello Paddy Cafe! I would like to reserve a table.%0A%0A*Name:* ${name}%0A*Date:* ${date}%0A*Time:* ${time}%0A*Pax:* ${pax} people%0A%0APlease confirm my booking. Thank you!`;
                 
+                // Open WhatsApp (Phone number sourced from actual data: +60129480991)
                 window.open(`https://wa.me/60129480991?text=${text}`, '_blank');
             };
 
@@ -745,6 +779,7 @@
                 <section id="book" className="py-24 bg-white dark:bg-forest-light text-forest dark:text-light transition-colors duration-500">
                     <div className="container mx-auto px-6 lg:px-12">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                            {/* Form */}
                             <div>
                                 <h2 className="text-4xl md:text-5xl font-serif mb-4 text-forest dark:text-gold">Reserve Your Experience</h2>
                                 <p className="text-gray-600 dark:text-gray-300 font-light mb-10">Secure your table in advance and ensure a perfect dining experience amidst nature.</p>
@@ -776,6 +811,7 @@
                                 </form>
                             </div>
 
+                            {/* Location Details */}
                             <div className="bg-light dark:bg-forest p-8 md:p-12 rounded-3xl shadow-xl flex flex-col justify-between border border-gray-200 dark:border-white/10">
                                 <div>
                                     <h3 className="text-2xl font-serif mb-6 text-forest dark:text-gold">Visit Us</h3>
@@ -830,6 +866,7 @@
 
             return (
                 <footer className="bg-forest text-light py-16 border-t border-white/10 relative overflow-hidden">
+                    {/* Background Pattern */}
                     <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(#d4af37 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
                     
                     <div className="container mx-auto px-6 lg:px-12 relative z-10">
@@ -837,10 +874,10 @@
                             <div className="col-span-1 md:col-span-2">
                                 <div className="flex items-center gap-3 mb-6">
                                     <img 
-                                        src={images/Logo.jpg
+                                        src="images/Logo.jpg" 
                                         alt="Paddy Cafe Logo" 
                                         className="h-12 w-auto object-contain"
-                                        onError={(e) => { e.target.src = FALLBACK_LOGO; }}
+                                        onError={(e) => { e.target.style.display = 'none'; }}
                                     />
                                     <h2 className="text-3xl font-serif text-gold tracking-widest">PADDY CAFE</h2>
                                 </div>
@@ -886,6 +923,7 @@
             const [loading, setLoading] = useState(true);
             const [isDark, setIsDark] = useState(true);
 
+            // Initialize Lenis Smooth Scroll
             useEffect(() => {
                 const lenis = new Lenis({
                     duration: 1.2,
@@ -908,6 +946,7 @@
                 return () => lenis.destroy();
             }, []);
 
+            // Handle Custom Cursor Movement
             useEffect(() => {
                 const cursor = document.getElementById('custom-cursor');
                 const moveCursor = (e) => {
@@ -920,12 +959,14 @@
                 };
                 window.addEventListener('mousemove', moveCursor);
                 
+                // Hide cursor on leaving window
                 window.addEventListener('mouseout', () => gsap.to(cursor, {opacity: 0}));
                 window.addEventListener('mouseover', () => gsap.to(cursor, {opacity: 1}));
                 
                 return () => window.removeEventListener('mousemove', moveCursor);
             }, []);
 
+            // Handle Theme Toggle
             useEffect(() => {
                 const html = document.documentElement;
                 if (isDark) {
@@ -952,6 +993,7 @@
                         <Booking />
                         <Footer />
                         
+                        {/* Floating WhatsApp Button */}
                         <a href="https://wa.me/60129480991" target="_blank" rel="noreferrer" 
                            className="fixed bottom-6 right-6 z-50 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 animate-bounce"
                            style={{ animationDuration: '3s' }}>
